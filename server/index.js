@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyparser = require('body-parser');
 const { auth } = require('./middleware/auth');
@@ -23,6 +24,7 @@ mongoose
 
 // ***** Middleware ******************************************
 
+app.use(morgan('dev'));
 // application/x-www-form-urlencoded
 app.use(bodyparser.urlencoded({ extended: true }));
 // application/json
@@ -44,6 +46,8 @@ app.post('/api/users/register', (req, res) => {
 });
 
 app.post('/api/users/login', (req, res) => {
+  console.log(req.body);
+
   // 이메일이 존재하는 지 확인
   User.findOne(
     {
@@ -51,7 +55,7 @@ app.post('/api/users/login', (req, res) => {
     },
     (err, user) => {
       if (!user) {
-        return res.json({
+        return res.status(400).json({
           loginSuccess: false,
           message: '해당 이메일에 해당하는 유저가 없습니다.',
         });
@@ -107,7 +111,10 @@ app.get('/api/users/logout', auth, (req, res) => {
     },
     (err, user) => {
       if (err) return res.json({ success: false, err });
-      return res.status(200).send({ success: true });
+      return res
+        .cookie('x_auth', null)
+        .status(200)
+        .send({ success: true });
     },
   );
 });

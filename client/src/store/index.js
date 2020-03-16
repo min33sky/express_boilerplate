@@ -5,13 +5,14 @@ import promiseMiddleware from 'redux-promise';
 
 import reducer from '../reducers';
 
-const initialState = {};
+// const initialState = {};
 
 const enhancer =
   process.env.NODE_ENV === 'production'
     ? compose(applyMiddleware(promiseMiddleware, ReduxThunk))
     : composeWithDevTools(applyMiddleware(promiseMiddleware, ReduxThunk));
 
-const store = createStore(reducer, initialState, enhancer);
+// const store = createStore(reducer, initialState, enhancer);
+const store = createStore(reducer, enhancer);
 
 export default store;
