@@ -112,4 +112,11 @@ app.get('/api/users/logout', auth, (req, res) => {
   );
 });
 
+// 테스트용
+app.get('/api/hello', (req, res) => {
+  res.status(200).send({
+    result: 'success',
+  });
+});
+
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}`));
